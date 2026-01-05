@@ -504,7 +504,7 @@ let skillTreeUpgrades = [
         { id: 13, description: "Unlock the Skill Tree!", check: () => skillTreeUnlocked === true, unlocked: JSON.parse(localStorage.getItem('achievement13Unlocked')) || false },
         { id: 14, description: "Reach 100,000 coins!", check: () => coins >= 100000, unlocked: JSON.parse(localStorage.getItem('achievement14Unlocked')) || false },
         { id: 15, description: "Complete 200 total races!", check: () => totalRaces >= 200, unlocked: JSON.parse(localStorage.getItem('achievement15Unlocked')) || false },
-        { id: 16, description: "Unlock the casino!", check: () => skillTreeUpgrades[5].purchased, unlocked: JSON.parse(localStorage.getItem('achievement16Unlocked')) || false },
+        { id: 16, description: "Unlock the casino!", check: () => totalRaces >= 50, unlocked: JSON.parse(localStorage.getItem('achievement16Unlocked')) || false },
         { id: 17, description: "Reach a total CpR of 10,000!", check: () => calculateCoinsPerRace() >= 10000, unlocked: JSON.parse(localStorage.getItem('achievement17Unlocked')) || false },
         { id: 18, description: "Discover Star Bits!", check: () => starBits >= 1, unlocked: JSON.parse(localStorage.getItem('achievement18Unlocked')) || false },
         { id: 19, description: "Earn 25 Coins per Second!", check: () => coinsPerSecond >= 25, unlocked: JSON.parse(localStorage.getItem('achievement19Unlocked')) || false },
@@ -536,7 +536,7 @@ let skillTreeUpgrades = [
     'PET TAMER': { tag: '[PET TAMER]', tagColor: '#FFFF00', nameColor: '#FFFF00' },
     'D4RK': { tag: '[D4RK]', tagColor: '#FF69B4', nameColor: '#FF69B4' },
     'DEAN': { tag: '[DEAN]', tagColor: '#00008B', nameColor: '#00008B' },
-    'MARIO': {tag: '[MARIO]', tagColor: '#FF4433', nameColor: '#FF4433' }
+    'MARIO': {tag: '[MARIO]', tagColor: '#FF4433', nameColor: '#FF4433' }       
 
 };
 
@@ -609,6 +609,9 @@ const LEVEL_MILESTONES = [
   { level: 13, races: 1000 },
   { level: 14, races: 1250},
   { level: 15, races: 1500},
+  { level: 16, races: 1750},
+  { level: 17, races: 2000},
+  { level: 18, races: 2500},  
 ];
 
 
