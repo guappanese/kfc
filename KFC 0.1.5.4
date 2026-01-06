@@ -916,9 +916,17 @@ localStorage.setItem('equippedPets', JSON.stringify(equippedPets));
 
 const petMultiplierSum = equippedPets.reduce((sum, key) => {
   const { name, level } = parsePetKey(key);
-  const ownedEntry = ownedPets.find(p => p.name === name && (parseInt(p.level,10)||1) === level);
-  return sum + ((ownedEntry?.multiplier || 0) / 100);
+  const ownedEntry = ownedPets.find(p =>
+    p.name === name && (Math.max(1, parseInt(p.level, 10) || 1) === level)
+  );
+  if (!ownedEntry) return sum;
+
+  const base = getBaseMultiplierForPet(name, ownedEntry.multiplier || 0);
+  const multNow = multiplierForLevel(base, level);
+
+  return sum + (multNow / 100);
 }, 0);
+
 
 
 
@@ -5821,6 +5829,8 @@ window.giveStarbits = function(amount = 1) {
 
 
     window.resetClicker = function () {
+    sessionRaces = 0;
+    totalRaces = 0;
     coins = 0;
     coinsPerSecond = 0;
     prestigeCount = 0;
@@ -5836,17 +5846,20 @@ localStorage.setItem('selectedChickenIndex', '0');
 localStorage.removeItem('pendingChickenUnlock');
 
     localStorage.setItem('klaviaCoins', 0);
+    localStorage.setItem('totalRaces', 0);
     localStorage.setItem('prestigeCount', 0);
     localStorage.setItem('prestigePoints', 0);
     localStorage.setItem('starBits', 0);
     localStorage.setItem('userRole', 'Guest');
 
+    localStorage.removeItem('ownedPets');
     localStorage.removeItem('ownedTags');
     localStorage.removeItem('skillTreeUnlocked');
     localStorage.removeItem('generator1Purchased');
 
 if (typeof window.refreshChickenUI === 'function') window.refreshChickenUI();
 
+if (typeof window.refreshPetsUI === 'function') window.refreshPetsUI();
 
 
     window.ownedTags = ['default'];
@@ -5855,10 +5868,13 @@ if (typeof window.refreshChickenUI === 'function') window.refreshChickenUI();
     if (window.userId && window.database) {
         window.database.ref('leaderboard/' + window.userId).update({
             coins: 0,
+            totalRaces: 0,
+            totalPets: 0,
             prestigeCount: 0,
             timestamp: firebase.database.ServerValue.TIMESTAMP
         });
 
+        window.database.ref('ownedPets/' + window.userId).remove();
         window.database.ref('userOwnedRoles/' + window.userId).remove(); // remove all roles
         window.database.ref('userRoles/' + window.userId).set('Guest');
     }
