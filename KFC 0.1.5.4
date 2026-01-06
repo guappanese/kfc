@@ -5797,11 +5797,12 @@ window.giveStarbits = function(amount = 1) {
     if (window.updateHUD) window.updateHUD();
 };
 
-    window.giveRaces = function(amount) {
-        if (window.userId !== 'guappanese') {
-        console.error("Access Denied");
-        return;
-    }
+  window.giveRaces = function(amount) {
+  if (!['guappanese','Donovan'].includes(window.userId)) {
+    console.error("Access Denied");
+    return;
+  }
+
         amount = parseInt(amount);
         if (isNaN(amount) || amount <= 0) return console.log("Cannot be 0");
         sessionRaces += amount;
