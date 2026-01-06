@@ -1994,8 +1994,8 @@ function renderSkillTree() {
 // Skill Tree Button Logic
 skillTreeButton.addEventListener('click', () => {
    if (!skillTreeUnlocked) {
-    if (coins >= 250000) {
-        coins -= 250000;
+    if (coins >= 25000) {
+        coins -= 25000;
         coins = Math.round(coins);
         localStorage.setItem('klaviaCoins', coins);
 
