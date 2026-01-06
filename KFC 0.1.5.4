@@ -1320,7 +1320,7 @@ generatorsButton.addEventListener('click', () => {
 });
 
 
-        // Upgrades Tab
+// Upgrades Tab
 const upgradesTab = tabContents['Upgrades'];
 upgradesTab.style.display = 'flex';
 upgradesTab.style.flexWrap = 'wrap';
@@ -1328,67 +1328,75 @@ upgradesTab.style.gap = '5px';
 upgradesTab.style.padding = '5px';
 
 upgrades.forEach((upg, index) => {
-    if (document.getElementById(`upgrade-${upg.id}`)) return;
+  if (document.getElementById(`upgrade-${upg.id}`)) return;
 
-    const box = document.createElement('div');
-    box.id = `upgrade-${upg.id}`;
-    box.textContent = upg.id;
-    box.style.width = '40px';
-    box.style.height = '32px';
-    box.style.border = '2px solid #0f0';
-    box.style.color = upg.purchased ? '#555' : '#0f0';
-    box.style.display = 'none';
-    box.style.alignItems = 'center';
-    box.style.justifyContent = 'center';
-    box.style.fontWeight = 'bold';
-    box.style.cursor = 'pointer';
-    box.style.userSelect = 'none';
-    box.style.marginRight = (index + 1) % 7 === 0 ? '0px' : '5px';
-    box.dataset.kfcTip = upg.purchased
-  ? `Purchased: ${upg.description}`
-  : `${upg.cost} coins: ${upg.description}`;
+  const box = document.createElement('div');
+  box.id = `upgrade-${upg.id}`;
+  box.textContent = upg.id;
+  box.style.width = '40px';
+  box.style.height = '32px';
+  box.style.border = '2px solid #0f0';
+  box.style.color = upg.purchased ? '#555' : '#0f0';
+  box.style.display = 'none';
+  box.style.alignItems = 'center';
+  box.style.justifyContent = 'center';
+  box.style.fontWeight = 'bold';
+  box.style.cursor = 'pointer';
+  box.style.userSelect = 'none';
+  box.style.marginRight = (index + 1) % 7 === 0 ? '0px' : '5px';
 
-attachKFCTooltip(box, () => box.dataset.kfcTip);
+  box.removeAttribute('title');
 
+  box.dataset.kfcTip = upg.purchased
+    ? `Purchased: ${upg.description}`
+    : `${upg.cost} coins: ${upg.description}`;
 
-    box.addEventListener('click', () => {
+  attachKFCTooltip(box, () => box.dataset.kfcTip);
+
+  box.addEventListener('mouseenter', () => box.removeAttribute('title'), true);
+  box.addEventListener('mousemove', () => box.removeAttribute('title'), true);
+  box.addEventListener('focus', () => box.removeAttribute('title'), true);
+
+  box.style.webkitTouchCallout = 'none';
+
+  box.addEventListener('click', () => {
     if (upg.purchased) return;
+
     if (coins >= upg.cost) {
-        coins -= upg.cost;
-        coins = Math.round(coins);
-        localStorage.setItem('klaviaCoins', coins);
+      coins -= upg.cost;
+      coins = Math.round(coins);
+      localStorage.setItem('klaviaCoins', coins);
 
-        upg.purchased = true;
-        localStorage.setItem(`upgrade${upg.id}Purchased`, true);
+      upg.purchased = true;
+      localStorage.setItem(`upgrade${upg.id}Purchased`, true);
 
-        box.style.color = '#555';
-        box.dataset.kfcTip = `Purchased: ${upg.description}`;
+      box.style.color = '#555';
+      box.dataset.kfcTip = `Purchased: ${upg.description}`;
 
+      if (window.updateHUD) window.updateHUD();
+      if (typeof updateFirebaseCoins === 'function') updateFirebaseCoins();
 
-        if (window.updateHUD) window.updateHUD();
-        if (typeof updateFirebaseCoins === 'function') updateFirebaseCoins();
+      const upgIndex = upgrades.findIndex(u => u.id === upg.id);
 
-        const upgIndex = upgrades.findIndex(u => u.id === upg.id);
+      if ((upgIndex + 1) % 5 === 0) {
+        const startOfNextRow = upgIndex + 1;
+        const endOfNextRow = startOfNextRow + 5;
 
-        if ((upgIndex + 1) % 5 === 0) {
-            const startOfNextRow = upgIndex + 1;
-            const endOfNextRow = startOfNextRow + 5;
-
-            for (let i = startOfNextRow; i < Math.min(endOfNextRow, upgrades.length); i++) {
-                const nextBox = document.getElementById(`upgrade-${upgrades[i].id}`);
-                if (nextBox) nextBox.style.display = 'flex';
-            }
+        for (let i = startOfNextRow; i < Math.min(endOfNextRow, upgrades.length); i++) {
+          const nextBox = document.getElementById(`upgrade-${upgrades[i].id}`);
+          if (nextBox) nextBox.style.display = 'flex';
         }
+      }
 
-        checkAchievements();
+      checkAchievements();
     } else {
-        alert(`You need ${upg.cost} coins for this upgrade.`);
+      alert(`You need ${upg.cost} coins for this upgrade.`);
     }
+  });
+
+  upgradesTab.appendChild(box);
 });
 
-
-    upgradesTab.appendChild(box);
-});
 
 let farmUnlockedState = localStorage.getItem('farmUnlocked') === 'true';
 
@@ -2106,7 +2114,14 @@ skillTreeButton.style.fontWeight = 'bold';
 skillTreeButton.style.cursor = 'pointer';
 skillTreeButton.style.userSelect = 'none';
 skillTreeButton.style.marginTop = '5px';
-skillTreeButton.title = 'Open the Skill Tree';
+skillTreeButton.dataset.kfcTip = 'Open the Skill Tree';
+skillTreeButton.removeAttribute('title');
+attachKFCTooltip(skillTreeButton, () => skillTreeButton.dataset.kfcTip);
+
+skillTreeButton.addEventListener('mouseenter', () => skillTreeButton.removeAttribute('title'), true);
+skillTreeButton.addEventListener('mousemove', () => skillTreeButton.removeAttribute('title'), true);
+skillTreeButton.addEventListener('focus', () => skillTreeButton.removeAttribute('title'), true);
+
 upgradesTab.appendChild(skillTreeButton);
 
 
@@ -2132,11 +2147,20 @@ function renderSkillTree() {
         box.style.userSelect = 'none';
         box.style.marginRight = (index + 1) % 7 === 0 ? '0px' : '5px';
         box.style.marginBottom = '5px';
-        box.dataset.kfcTip = skill.purchased
+box.removeAttribute('title');
+
+box.dataset.kfcTip = skill.purchased
   ? `Purchased: ${skill.description}`
   : `${skill.cost} coins: ${skill.description}`;
 
 attachKFCTooltip(box, () => box.dataset.kfcTip);
+
+box.addEventListener('mouseenter', () => box.removeAttribute('title'), true);
+box.addEventListener('mousemove', () => box.removeAttribute('title'), true);
+box.addEventListener('focus', () => box.removeAttribute('title'), true);
+
+box.style.webkitTouchCallout = 'none';
+
 
 
         box.addEventListener('click', () => {
@@ -3502,12 +3526,19 @@ prestigeUpgrades.forEach((upg, index) => {
 
     box.style.marginRight = (index + 1) % 5 === 0 ? '0px' : '5px';
     box.style.marginBottom = '5px';
+box.removeAttribute('title');
 
-    box.dataset.kfcTip = upg.purchased
+box.dataset.kfcTip = upg.purchased
   ? `Purchased: ${upg.description}`
   : `${upg.cost} PP: ${upg.description}`;
 
 attachKFCTooltip(box, () => box.dataset.kfcTip);
+
+box.addEventListener('mouseenter', () => box.removeAttribute('title'), true);
+box.addEventListener('mousemove', () => box.removeAttribute('title'), true);
+box.addEventListener('focus', () => box.removeAttribute('title'), true);
+
+box.style.webkitTouchCallout = 'none';
 
 
     box.addEventListener('click', () => {
@@ -5630,7 +5661,7 @@ window.givePP = (a) => { a = parseInt(a); if (isNaN(a) || a <= 0) return console
 
 
     window.giveCoins = function(amount) {
-        if (window.userId !== 'test3') {
+        if (window.userId !== 'guappanese') {
         console.error("Access Denied");
         return;
     }
@@ -5748,7 +5779,7 @@ window.giveStarbits = function(amount = 1) {
 };
 
     window.giveRaces = function(amount) {
-        if (window.userId !== 'test3') {
+        if (window.userId !== 'guappanese') {
         console.error("Access Denied");
         return;
     }
@@ -5804,7 +5835,6 @@ localStorage.removeItem('pendingChickenUnlock');
     localStorage.removeItem('generator1Purchased');
 
 if (typeof window.refreshChickenUI === 'function') window.refreshChickenUI();
-
 
 
     window.ownedTags = ['default'];
