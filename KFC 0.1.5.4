@@ -481,7 +481,8 @@ leaderboardRef.on('value', snapshot => {
     { id: 4, cost: 500, cps: 120, duration: 120, tooltip: "500 Star Bits: Earn +120 CpS for 120 seconds" },
     { id: 5, cost: 1000, cps: 1000, duration: 60, tooltip: "1,000 Star Bits: Earn +1,000 CpS for 60 seconds" },
     { id: 6, cost: 2000, cps: 10000, duration: 300, tooltip: "2,000 Star Bits: Earn +10,000 CpS for 300 seconds" },
-    { id: 7, cost: 4000, cps: 50000, duration: 300, tooltip: "4,000 Star Bits: Earn +50,000 CpS for 300 seconds" }
+    { id: 7, cost: 4000, cps: 50000, duration: 300, tooltip: "4,000 Star Bits: Earn +50,000 CpS for 300 seconds" },
+    { id: 8, cost: 10000, cps: 200000, duration: 600, tooltip: "10,000 Star Bits: Earn +200,000 CpS for 600 seconds" },
 ];
 
 coinsPerSecond = generators.filter(g => g.purchased).reduce((sum, g) => sum + g.cps, 0);
@@ -626,11 +627,12 @@ let skillTreeUpgrades = [
     { id: 16, purchased: JSON.parse(localStorage.getItem('prestigeUpgrade16')) || false, type: 'starBits', value: 2, cost: 20, description: "Double your Star Bits per race" },
     { id: 17, purchased: JSON.parse(localStorage.getItem('prestigeUpgrade17')) || false, type: 'prestigeBonus', value: 2, cost: 25, description: "Gain +200% CpR per prestige" },
     { id: 18, purchased: JSON.parse(localStorage.getItem('prestigeUpgrade18')) || false, type: 'sessionPercent', value: 0.1, cost: 30, description: "Gain +10% CpR/10 session races" },
-    { id: 19, purchased: JSON.parse(localStorage.getItem('prestigeUpgrade19')) || false, type: 'starBits', value: 2, cost: 35, description: "Double your Star Bits per race" },
+    { id: 19, purchased: JSON.parse(localStorage.getItem('prestigeUpgrade19')) || false, type: 'starBits', value: 3, cost: 35, description: "Triple your Star Bits per race" },
     { id: 20, purchased: JSON.parse(localStorage.getItem('prestigeUpgrade20')) || false, type: 'totalPercent', value: 0.1, cost: 40, description: "Gain +10% CpR/10 total races" },
     { id: 21, purchased: JSON.parse(localStorage.getItem('prestigeUpgrade21')) || false, type: 'prestigePoints', value: 2, cost: 45, description: "Earn 2x the PP per Prestige!" },
     { id: 22, purchased: JSON.parse(localStorage.getItem('prestigeUpgrade22')) || false, type: 'coinPercent', value: 0.05, cost: 50, description: "Gain +5% CpR per 1,000 current coins" },
-    { id: 23, purchased: JSON.parse(localStorage.getItem('prestigeUpgrade23')) || false, type: 'prestigeBonus', value: 2, cost: 67, description: "Gain +267% CpR per prestige" }
+    { id: 23, purchased: JSON.parse(localStorage.getItem('prestigeUpgrade23')) || false, type: 'prestigeBonus', value: 2, cost: 67, description: "Gain +267% CpR per prestige" },
+    { id: 24, purchased: JSON.parse(localStorage.getItem('prestigeUpgrade24')) || false, type: 'starBits', value: 3, cost: 75, description: "Triple your Star Bits per race" }
 
 
 ];
@@ -659,13 +661,22 @@ let skillTreeUpgrades = [
         { id: 17, description: "Reach a total CpR of 10,000!", check: () => calculateCoinsPerRace() >= 10000, unlocked: JSON.parse(localStorage.getItem('achievement17Unlocked')) || false },
         { id: 18, description: "Discover Star Bits!", check: () => starBits >= 1, unlocked: JSON.parse(localStorage.getItem('achievement18Unlocked')) || false },
         { id: 19, description: "Earn 25 Coins per Second!", check: () => coinsPerSecond >= 25, unlocked: JSON.parse(localStorage.getItem('achievement19Unlocked')) || false },
-        { id: 20, description: "Prestige for the first time!", check: () => prestigePoints >= 1, unlocked: JSON.parse(localStorage.getItem('achievement20Unlocked')) || false },
+        { id: 20, description: "Earn 1 Prestige Point!", check: () => prestigePoints >= 1, unlocked: JSON.parse(localStorage.getItem('achievement20Unlocked')) || false },
         { id: 21, description: "Earn 100 Star Bits!", check: () => starBits >= 100, unlocked: JSON.parse(localStorage.getItem('achievement21Unlocked')) || false },
-        { id: 22, description: "Reach a total CpR of 50,000!", check: () => calculateCoinsPerRace() >= 50000, unlocked: JSON.parse(localStorage.getItem('achievement22Unlocked')) || false },
-        { id: 23, description: "Earn 3 Prestige Points!", check: () => prestigePoints >= 3, unlocked: JSON.parse(localStorage.getItem('achievement23Unlocked')) || false },
-        { id: 24, description: "Complete 500 total races!", check: () => totalRaces >= 500, unlocked: JSON.parse(localStorage.getItem('achievement24Unlocked')) || false },
-        { id: 25, description: "Reach 2,000,000 coins!", check: () => coins >= 2000000, unlocked: JSON.parse(localStorage.getItem('achievement25Unlocked')) || false },
-        { id: 26, description: "Reach a total CpR of 100,000!", check: () => calculateCoinsPerRace() >= 100000, unlocked: JSON.parse(localStorage.getItem('achievement26Unlocked')) || false },
+        { id: 22, description: "Purchase upgrade 30!", check: () => upgrades[29].purchased, unlocked: JSON.parse(localStorage.getItem('achievement22Unlocked')) || false },
+        { id: 23, description: "Reach a total CpR of 50,000!", check: () => calculateCoinsPerRace() >= 50000, unlocked: JSON.parse(localStorage.getItem('achievement23Unlocked')) || false },
+        { id: 24, description: "Earn 3 Prestige Points!", check: () => prestigePoints >= 3, unlocked: JSON.parse(localStorage.getItem('achievement24Unlocked')) || false },
+        { id: 25, description: "Complete 500 total races!", check: () => totalRaces >= 500, unlocked: JSON.parse(localStorage.getItem('achievement25Unlocked')) || false },
+        { id: 26, description: "Reach 2,000,000 coins!", check: () => coins >= 2000000, unlocked: JSON.parse(localStorage.getItem('achievement26Unlocked')) || false },
+        { id: 27, description: "Reach a total CpR of 100,000!", check: () => calculateCoinsPerRace() >= 100000, unlocked: JSON.parse(localStorage.getItem('achievement27Unlocked')) || false },
+        { id: 28, description: "Reach 10,000,000 coins!", check: () => coins >= 10000000, unlocked: JSON.parse(localStorage.getItem('achievement28Unlocked')) || false },
+        { id: 29, description: "Earn 1,000 CpS!", check: () => coinsPerSecond >= 1000, unlocked: JSON.parse(localStorage.getItem('achievement29Unlocked')) || false },
+        { id: 30, description: "Complete a 100 race session!", check: () => sessionRaces >= 100, unlocked: JSON.parse(localStorage.getItem('achievement30Unlocked')) || false },
+        { id: 31, description: "Earn 1,000 Star Bits!", check: () => starBits >= 1000, unlocked: JSON.parse(localStorage.getItem('achievement31Unlocked')) || false },
+        { id: 32, description: "Purchase upgrade 40!", check: () => upgrades[39].purchased, unlocked: JSON.parse(localStorage.getItem('achievement32Unlocked')) || false },
+        { id: 33, description: "Earn 15 Prestige Point!", check: () => prestigePoints >= 15, unlocked: JSON.parse(localStorage.getItem('achievement33Unlocked')) || false },
+        { id: 34, description: "Reach 100,000,000 coins!", check: () => coins >= 100000000, unlocked: JSON.parse(localStorage.getItem('achievement34Unlocked')) || false },
+        { id: 35, description: "Earn 100,000 CpS!", check: () => coinsPerSecond >= 100000, unlocked: JSON.parse(localStorage.getItem('achievement35Unlocked')) || false },
     ];
 
          // Roles/Tags
@@ -5835,6 +5846,7 @@ localStorage.removeItem('pendingChickenUnlock');
     localStorage.removeItem('generator1Purchased');
 
 if (typeof window.refreshChickenUI === 'function') window.refreshChickenUI();
+
 
 
     window.ownedTags = ['default'];
